@@ -1,250 +1,19 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>SHAKESPEARE GENERATOR</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 20px;
-            background-color: #f1f1f1;
-        }
-
-        h1 {
-            text-align: center;
-            margin-bottom: 20px;
-            color: #333;
-        }
-
-        .container {
-            max-width: 600px;
-            margin: 0 auto;
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        }
-
-        label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-            color: #555;
-        }
-        .subtitle-container h6{
-            text-align: center;
-            margin-bottom: 20px;
-            color: #333;
-            font-size: 14px;
-            font-weight: normal;
-        }
-
-        textarea,
-        input[type="number"] {
-            width: 100%;
-            padding: 10px;
-            font-size: 16px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-            resize: vertical;
-        }
-
-        button {
-            display: block;
-            margin-top: 20px;
-            padding: 10px 20px;
-            font-size: 16px;
-            background-color: #4caf50;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        button:hover {
-            background-color: #45a049;
-        }
-
-        #output-text {
-            background-color: #f9f9f9;
-            border: 1px solid #ccc;
-            padding: 10px;
-            border-radius: 5px;
-            margin-top: 20px;
-            font-size: 16px;
-            line-height: 1.5;
-            color: #555;
-            min-height: 100px;
-            white-space: pre-wrap; /* Preserve line breaks and whitespace */
-        }
-
-        .alert {
-            background-color: #f44336;
-            color: white;
-            padding: 10px;
-            margin-bottom: 10px;
-            border-radius: 5px;
-        }
-
-        .loader {
-            border: 16px solid #f3f3f3;
-            border-top: 16px solid #4caf50;
-            border-radius: 50%;
-            width: 80px;
-            height: 80px;
-            animation: spin 2s linear infinite;
-            margin: 0 auto;
-            margin-top: 20px;
-        }
-        select {
-        width: 100%;
-        padding: 10px;
-        font-size: 16px;
-        border-radius: 5px;
-        border: 1px solid #ccc;
-        appearance: none; /* Remove default appearance */
-        background-color: #fff;
-        background-image: url("https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-ios7-arrow-down-512.png"); /* Add custom arrow down icon */
-        background-position: right center;
-        background-repeat: no-repeat;
-        background-size: 20px;
-        cursor: pointer;
-        padding-bottom: 12px;
-    }
-    input[type="file"] {
-        display: none; /* Hide the default file upload button */
-    }
-
-    .custom-file-upload {
-        display: inline-block;
-        padding: 10px 20px;
-        font-size: 16px;
-        background-color: #4caf50;
-        color: white;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        transition: background-color 0.3s ease;
-    }
-
-    .custom-file-upload:hover {
-        background-color: #45a049;
-    }
-
-    select option {
-        background-color: #fff;
-    }
-
-        .tooltip {
-            position: relative;
-            display: inline-block;
-            cursor: pointer;
-        }
-        img.fcc-logo {
-            display: block;
-            margin: 0 auto;
-            width: 100px;
-        }
-
-        .tooltip .tooltiptext {
-            visibility: hidden;
-            width: 200px;
-            background-color: #555;
-            color: #fff;
-            text-align: center;
-            border-radius: 6px;
-            padding: 5px;
-            position: absolute;
-            z-index: 1;
-            bottom: 125%;
-            left: 50%;
-            transform: translateX(-50%);
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-
-        .tooltip:hover .tooltiptext {
-            visibility: visible;
-            opacity: 1;
-        }
-        .tooltiptext {
-            visibility: hidden;
-            width: 200px;
-            background-color: #555;
-            color: #fff;
-            text-align: center;
-            border-radius: 6px;
-            padding: 5px;
-            position: absolute;
-            z-index: 1;
-            bottom: 125%;
-            left: 50%;
-            transform: translateX(-50%);
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-       
-    .caption {
-        text-align: left;
-        margin-bottom: 20px;
-        color: #333;
-        font-size: 16px;
-    }
-
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-    </style>
+    <title>Transformer Based NLP Model</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script>
- $(document).ready(function() {
-            $("#generate-btn").click(function() {
-                var text = $("#input-text").val();
-
-                $.ajax({
-                    url: "/generate",
-                    type: "POST",
-                    dataType: "json",
-                    contentType: "application/json",
-                    data: JSON.stringify({ "text": text, "n_emb": $("#n-emb").val(), "n_head": $("#n-head").val() }),
-                    beforeSend: function() {
-                        //clear previous output
-                        $("#output-text").html("");
-                        // Show loading spinner
-                        $(".container").append('<div class="loader"></div>');
-                    },
-                    success: function(response) {
-                        var generatedText = response.generated_text;
-                        generatedText = generatedText.replace(/\n/g, "<br>"); // Replace newline characters with <br> tags
-                        $("#output-text").html(generatedText);
-                    },
-                    error: function(xhr, status, error) {
-                        console.log("Error: " + error);
-                        console.log("Status: " + status);
-                        console.log(xhr);
-
-                        // Show error alert
-                        $("#output-text").before('<div class="alert">An error occurred. Please try again.</div>');
-                    },
-                    complete: function() {
-                        // Remove the loading spinner
-                        $(".loader").remove();
-                    }
-                });
-            });
-        });
-    </script>
+    <!--css file-->
+    <link rel="stylesheet" href="static/design.css">
+    <!--js file-->
+    <script src="static/script.js"></script>
     <head>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 </head>
 <body>
-    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRXN1r-drnuTxE94xVLk0T8W2HsCunizjxJ2-zsqnP612pvUQh0QY6kqBc&s" alt="freeCodeCamp logo" class="fcc-logo">
-    <h1>SHAKESPEARE GENERATOR</h1>
+    <h1>TRANSFORMER BASED NLP MODEL</h1>
     <div class="subtitle-container">
-        <h6>Generate Generate a similar text on the basis of the text you provide. The default model is trained on Shakespeare's works.</h6>
+        <h6>Generate Generate a similar text on the basis of the dataset you provide. The default dataset is Shakespeare's works.</h6>
     <div class="container">
         <div>
             <label for="dataset">Choose a dataset:</label>
@@ -253,10 +22,6 @@
             </label>
             <input type="file" id="dataset" accept=".txt">
             <p id="file-path"></p>
-            <div id = "caption">
-                <p>Upload a text file containing the dataset you want to train the model on. The file should contain one sentence per line.</p>
-                </div>
-    
 
         </div>        
         <div>
@@ -290,10 +55,17 @@
         <div>
             <button id="generate-btn">Generate</button>
         </div>
-        <div>
+        <div style="margin-bottom: 10px;">
             <h2>Output</h2>
             <div id="output-text"></div>
         </div>
+        <!--Footer-->
+        <div class="footer">
+            <p>This Project is made for the purpose of learning and understanding the concepts of NLP and Deep Learning. Do not use it for any other purpose.</p>
+            <p> If you'd like to learn more about the project or contribute to it, check out the <a href="https://github.com/DamiFlutter/minGPT">GitHub repository</a>.</p>
+            <p>Created by <a href="https://github.com/DamiFlutter">Damilola</a></p>
+
+            </div>
     </div>
 </body>
 </html>
