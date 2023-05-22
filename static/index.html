@@ -31,6 +31,13 @@
             font-weight: bold;
             color: #555;
         }
+        .subtitle-container h6{
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+            font-size: 14px;
+            font-weight: normal;
+        }
 
         textarea,
         input[type="number"] {
@@ -90,6 +97,44 @@
             margin: 0 auto;
             margin-top: 20px;
         }
+        select {
+        width: 100%;
+        padding: 10px;
+        font-size: 16px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+        appearance: none; /* Remove default appearance */
+        background-color: #fff;
+        background-image: url("https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-ios7-arrow-down-512.png"); /* Add custom arrow down icon */
+        background-position: right center;
+        background-repeat: no-repeat;
+        background-size: 20px;
+        cursor: pointer;
+        padding-bottom: 12px;
+    }
+    input[type="file"] {
+        display: none; /* Hide the default file upload button */
+    }
+
+    .custom-file-upload {
+        display: inline-block;
+        padding: 10px 20px;
+        font-size: 16px;
+        background-color: #4caf50;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .custom-file-upload:hover {
+        background-color: #45a049;
+    }
+
+    select option {
+        background-color: #fff;
+    }
 
         .tooltip {
             position: relative;
@@ -123,11 +168,30 @@
             visibility: visible;
             opacity: 1;
         }
-        p {
+        .tooltiptext {
+            visibility: hidden;
+            width: 200px;
+            background-color: #555;
+            color: #fff;
             text-align: center;
-            margin-bottom: 20px;
-            color: #333;
+            border-radius: 6px;
+            padding: 5px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            transition: opacity 0.3s;
         }
+       
+    .caption {
+        text-align: left;
+        margin-bottom: 20px;
+        color: #333;
+        font-size: 16px;
+    }
+
 
         @keyframes spin {
             0% { transform: rotate(0deg); }
@@ -136,7 +200,7 @@
     </style>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-        $(document).ready(function() {
+ $(document).ready(function() {
             $("#generate-btn").click(function() {
                 var text = $("#input-text").val();
 
@@ -145,8 +209,10 @@
                     type: "POST",
                     dataType: "json",
                     contentType: "application/json",
-                    data: JSON.stringify({ "text": text }),
+                    data: JSON.stringify({ "text": text, "n_emb": $("#n-emb").val(), "n_head": $("#n-head").val() }),
                     beforeSend: function() {
+                        //clear previous output
+                        $("#output-text").html("");
                         // Show loading spinner
                         $(".container").append('<div class="loader"></div>');
                     },
@@ -171,29 +237,56 @@
             });
         });
     </script>
+    <head>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 </head>
 <body>
     <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRXN1r-drnuTxE94xVLk0T8W2HsCunizjxJ2-zsqnP612pvUQh0QY6kqBc&s" alt="freeCodeCamp logo" class="fcc-logo">
     <h1>SHAKESPEARE GENERATOR</h1>
-    <p>Generate Shakespeare-like text using a GPT-2 model trained on Shakespeare's plays.</p>
+    <div class="subtitle-container">
+        <h6>Generate Generate a similar text on the basis of the text you provide. The default model is trained on Shakespeare's works.</h6>
     <div class="container">
+        <div>
+            <label for="dataset">Choose a dataset:</label>
+            <label for="dataset" class="custom-file-upload">
+                <i class="fas fa-upload"></i> Choose File
+            </label>
+            <input type="file" id="dataset" accept=".txt">
+            <p id="file-path"></p>
+            <div id = "caption">
+                <p>Upload a text file containing the dataset you want to train the model on. The file should contain one sentence per line.</p>
+                </div>
+    
+
+        </div>        
         <div>
             <label for="input-text">Input Text:</label>
             <textarea id="input-text" rows="4" cols="50" placeholder="Enter your text here">To be or not to be, that is the question.</textarea>
         </div>
-        <div>
-            <label class="tooltip" for="n-emb">n_embd:
+        <div style="margin-top: 10px;">
+            <label class="tooltip" for="n-emb">Embedding Size:
                 <span class="tooltiptext">The size of the embedding layer. Controls the dimensionality of the generated text.</span>
             </label>
-            <input type="number" id="n-emb" value="64">
+            <select id="n-emb">
+                <option value="64">64</option>
+                <option value="128">128</option>
+                <option value="256">256</option>
+            </select>
+            <span class="tooltiptext">The size of the embedding layer. Controls the dimensionality of the generated text.</span>
         </div>
-        <div>
-            <label class="tooltip" for="n-head">n_head:
+        <div style="margin-top: 10px;">
+            <label class="tooltip" for="n-head">Focus Units:
                 <span class="tooltiptext">The number of attention heads. Controls the model's ability to focus on different parts of the input sequence.</span>
             </label>
-            <input type="number" id="n-head" value="4">
+            <select id="n-head">
+                <option value="4">4</option>
+                <option value="8">8</option>
+                <option value="16">16</option>
+            </select>
+            <span class="tooltiptext">The number of attention heads. Controls the model's ability to focus on different parts of the input sequence.</span>
         </div>
         <!-- Add other hyperparameter inputs here if needed -->
+        
         <div>
             <button id="generate-btn">Generate</button>
         </div>

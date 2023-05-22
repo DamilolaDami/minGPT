@@ -12,10 +12,10 @@ eval_interval = 500
 learning_rate = 1e-3
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 eval_iters = 200
-n_embd = 64 #Increase this to 128 for better results
-n_head = 4 #Increase this to 8 for better results
+n_embd = 128 #Increase this to 128 for better results
+n_head = 8 #Increase this to 8 for better results
 n_layer = 4 #Increase this to 8 for better results
-dropout = 0.0 #Increase this to 0.1 for better results
+dropout = 0.1
 
 train_losses = [] # For plotting
 val_losses = [] # For plotting

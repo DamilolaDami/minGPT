@@ -9,6 +9,7 @@ minGPT is a minimalistic implementation of the Generative Pre-trained Transforme
 
 ```shell
 git clone https://github.com/DamiFlutter/minGPT.git
+<<<<<<< HEAD
 ```
 2. Change into the project directory:
 
@@ -47,3 +48,6 @@ This project was inspired by the original GPT model developed by OpenAI.
 ## Contact
 
 If you have any questions or suggestions, feel free to reach out to me at flutterdami@gmail.com
+=======
+
+>>>>>>> ccdadca (updates)

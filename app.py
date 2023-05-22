@@ -10,11 +10,6 @@ device = 'cuda' if torch.cuda.is_available() else 'cpu'
 app = Flask(__name__)
 CORS(app)
 
-# Load the trained model and stoi mapping
-model_state_dict = torch.load('model.pth', map_location=torch.device('cpu'))
-model = GPTLanguageModel()
-model.load_state_dict(model_state_dict)
-model.eval()
 
 with open('stoi.json', 'r') as f:
     stoi = json.load(f)
@@ -32,14 +27,14 @@ def home():
 @app.route('/generate', methods=['POST'])
 def generate_text():
     try:
-        model_state_dict = torch.load('model.pth', map_location=torch.device('cpu'))
-        model = GPTLanguageModel()
-        model.load_state_dict(model_state_dict)
-        model.eval()
-
         context = torch.zeros((1, 1), dtype=torch.long)
         max_new_tokens = 100
         if request.method == 'POST':
+            print(request.json)
+            model_state_dict = torch.load('model.pth', map_location=torch.device('cpu'))
+            model = GPTLanguageModel().to(device)
+            model.load_state_dict(model_state_dict)
+            model.eval()
             with open('input.txt', 'r', encoding='utf-8') as f:
                 text = f.read()
             chars = sorted(list(set(text)))
