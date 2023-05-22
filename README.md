@@ -47,6 +47,4 @@ This project was inspired by the original GPT model developed by OpenAI.
 ## Contact
 
 If you have any questions or suggestions, feel free to reach out to me at flutterdami@gmail.com
-=======
 
->>>>>>> ccdadca (updates)
