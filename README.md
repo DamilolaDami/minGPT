@@ -9,7 +9,6 @@ minGPT is a minimalistic implementation of the Generative Pre-trained Transforme
 
 ```shell
 git clone https://github.com/DamiFlutter/minGPT.git
-<<<<<<< HEAD
 ```
 2. Change into the project directory:
 
